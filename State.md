@@ -29,6 +29,24 @@ Components:
 - Document editing modes
 - Network connection states
 
+## How to Implement (OOP Steps)
+
+1️⃣ **Define State Interface**
+
+- Declares state-specific methods
+- _Type:_ Interface (`IState`)
+
+2️⃣ **Create Concrete States**
+
+- Implement state behavior in separate classes
+- _Type:_ Concrete classes implementing `IState`
+
+3️⃣ **Implement Context Class**
+
+- Maintains current state (interface reference)
+- Delegates requests to state object
+- _Type:_ Concrete class with state setter
+
 ## Structure
 
 ⌨️

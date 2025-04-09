@@ -33,6 +33,24 @@ Components:
 - Chat applications
 - Air traffic control systems
 
+## How to Implement (OOP Steps)
+
+1️⃣ **Define Mediator Interface**
+
+- Declares component communication methods
+- _Type:_ Interface (`IMediator`)
+
+2️⃣ **Create Colleague Base Class**
+
+- Contains mediator reference
+- _Type:_ Abstract class
+
+3️⃣ **Implement Concrete Mediator**
+
+- Contains all component references
+- Implements interaction logic
+- _Type:_ Concrete class
+
 ## Structure
 
 ⌨️

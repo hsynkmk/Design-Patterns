@@ -31,6 +31,28 @@ Components:
 - Distributed notification services
 - Sensor monitoring systems
 
+## How to Implement (OOP Steps)
+
+1️⃣ **Create Subject Interface**
+
+- `Register`, `Remove`, `Notify` methods
+- _Type:_ Abstract class/interface
+
+2️⃣ **Define Observer Interface**
+
+- `Update()` method
+- _Type:_ Interface (`IObserver`)
+
+3️⃣ **Implement Concrete Subject**
+
+- Maintains state and observer list
+- _Type:_ Concrete class
+
+4️⃣ **Build Concrete Observers**
+
+- Implement update logic
+- _Type:_ Concrete classes
+
 ## Structure
 
 ⌨️

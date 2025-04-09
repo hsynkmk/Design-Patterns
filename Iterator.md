@@ -29,6 +29,23 @@ Components:
 - Lazy/efficient element access
 - Parallel iteration support
 
+## How to Implement (OOP Steps)
+
+1️⃣ **Create Iterator Interface**
+
+- Declares `HasNext`, `Current`, `Next`
+- _Type:_ Interface (`IIterator<T>`)
+
+2️⃣ **Implement Aggregate Interface**
+
+- Declares `CreateIterator()` method
+- _Type:_ Interface (`ICollection<T>`)
+
+3️⃣ **Build Concrete Iterator**
+
+- Contains traversal logic for specific collection
+- _Type:_ Nested class (usually private)
+
 ## Structure
 
 ⌨️

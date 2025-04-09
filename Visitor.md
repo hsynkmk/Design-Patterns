@@ -2,38 +2,48 @@
 
 ## Problem
 
-🛒  
-Need to add new operations to complex object structures (e.g., shopping cart items) without:
+📄  
+Need to add new operations to complex object structures without changing their classes. Common when:
 
-- Modifying existing classes
-- Creating tight coupling
-- Using type-checking conditionals
+- You have stable element hierarchy
+- Operations change frequently
+- Operations need element-specific handling
 
 ## Solution
 
 👥  
-The Visitor Pattern:
+Separate algorithms from objects by:
 
-- Separates algorithms from objects
-- Uses double dispatch
-- Enables adding operations to object structures
-
-Components:
-
-- **Visitor Interface**: Operation contracts
-- **Concrete Visitor**: Implements operations
-- **Element Interface**: Accepts visitors
-- **Concrete Elements**: Object structure components
+- Defining operations in external visitor classes
+- Dispatching calls through `Accept` methods
+- Using double dispatch technique
 
 ## Use Cases
 
-📊
+🔧
 
-- Document format conversions
-- Shopping cart calculations
+- Document format converters
 - Code analysis tools
-- Game entity behaviors
-- Report generators
+- Game object behaviors
+- Tax calculation systems
+- UI rendering engines
+
+## How to Implement (OOP Steps)
+
+1️⃣ **Define Element Interface (interface)**  
+ Add `Accept(IVisitor)` method to all elements
+
+2️⃣ **Create Visitor Interface**  
+ Declare `Visit` methods for each element type
+
+3️⃣ **Implement Elements**  
+ Each element implements `Accept` to call visitor's method
+
+4️⃣ **Create Concrete Visitors**  
+ Implement operations by handling each element type
+
+5️⃣ **Traverse Structure**  
+ Pass visitor through object structure
 
 ## Structure
 
@@ -41,44 +51,44 @@ Components:
 
 ```mermaid
 classDiagram
-    class IVisitor {
+    class IDocumentVisitor {
         <<interface>>
-        +VisitBook(Book)
-        +VisitFruit(Fruit)
+        +VisitHeading(Heading)
+        +VisitParagraph(Paragraph)
     }
 
-    class IItem {
+    class IDocumentElement {
         <<interface>>
-        +Accept(IVisitor)
+        +Accept(IDocumentVisitor)
     }
 
-    class Book {
-        +Price
-        +Accept(IVisitor)
+    class Heading {
+        +Text
+        +Level
+        +Accept()
     }
 
-    class Fruit {
-        +PricePerKg
-        +Weight
-        +Accept(IVisitor)
+    class Paragraph {
+        +Content
+        +Accept()
     }
 
-    class DiscountVisitor {
-        +TotalDiscount
-        +VisitBook(Book)
-        +VisitFruit(Fruit)
+    class HtmlVisitor {
+        +VisitHeading()
+        +VisitParagraph()
     }
 
-    class TaxVisitor {
-        +TotalTax
-        +VisitBook(Book)
-        +VisitFruit(Fruit)
+    class MarkdownVisitor {
+        +VisitHeading()
+        +VisitParagraph()
     }
 
-    IVisitor <|.. DiscountVisitor
-    IVisitor <|.. TaxVisitor
-    IItem <|.. Book
-    IItem <|.. Fruit
+    IDocumentElement <|-- Heading
+    IDocumentElement <|-- Paragraph
+    IDocumentVisitor <|.. HtmlVisitor
+    IDocumentVisitor <|.. MarkdownVisitor
+    Heading --> IDocumentVisitor
+    Paragraph --> IDocumentVisitor
 ```
 
 ## C# Implementation
@@ -86,43 +96,43 @@ classDiagram
 ### Element Interface
 
 ```csharp
-public interface IItem
+public interface IDocumentElement
 {
-    void Accept(IVisitor visitor);
+    void Accept(IDocumentVisitor visitor);
 }
 ```
 
 ### Visitor Interface
 
 ```csharp
-public interface IVisitor
+public interface IDocumentVisitor
 {
-    void VisitBook(Book book);
-    void VisitFruit(Fruit fruit);
+    void VisitHeading(Heading heading);
+    void VisitParagraph(Paragraph paragraph);
 }
 ```
 
 ### Concrete Elements
 
 ```csharp
-public class Book : IItem
+public class Heading : IDocumentElement
 {
-    public decimal Price { get; set; }
+    public string Text { get; set; }
+    public int Level { get; set; }
 
-    public void Accept(IVisitor visitor)
+    public void Accept(IDocumentVisitor visitor)
     {
-        visitor.VisitBook(this);
+        visitor.VisitHeading(this);
     }
 }
 
-public class Fruit : IItem
+public class Paragraph : IDocumentElement
 {
-    public decimal PricePerKg { get; set; }
-    public decimal Weight { get; set; }
+    public string Content { get; set; }
 
-    public void Accept(IVisitor visitor)
+    public void Accept(IDocumentVisitor visitor)
     {
-        visitor.VisitFruit(this);
+        visitor.VisitParagraph(this);
     }
 }
 ```
@@ -130,39 +140,55 @@ public class Fruit : IItem
 ### Concrete Visitors
 
 ```csharp
-public class DiscountVisitor : IVisitor
+public class HtmlVisitor : IDocumentVisitor
 {
-    public decimal TotalDiscount { get; private set; }
+    public string Output { get; private set; } = string.Empty;
 
-    public void VisitBook(Book book)
+    public void VisitHeading(Heading heading)
     {
-        // 10% discount on books
-        TotalDiscount += book.Price * 0.1m;
+        Output += $"<h{heading.Level}>{heading.Text}</h{heading.Level}>\n";
     }
 
-    public void VisitFruit(Fruit fruit)
+    public void VisitParagraph(Paragraph paragraph)
     {
-        // 5% discount on fruits
-        decimal total = fruit.PricePerKg * fruit.Weight;
-        TotalDiscount += total * 0.05m;
+        Output += $"<p>{paragraph.Content}</p>\n";
     }
 }
 
-public class TaxVisitor : IVisitor
+public class MarkdownVisitor : IDocumentVisitor
 {
-    public decimal TotalTax { get; private set; }
+    public string Output { get; private set; } = string.Empty;
 
-    public void VisitBook(Book book)
+    public void VisitHeading(Heading heading)
     {
-        // 0% tax on books
-        TotalTax += 0;
+        Output += $"{new string('#', heading.Level)} {heading.Text}\n\n";
     }
 
-    public void VisitFruit(Fruit fruit)
+    public void VisitParagraph(Paragraph paragraph)
     {
-        // 8% tax on fruits
-        decimal total = fruit.PricePerKg * fruit.Weight;
-        TotalTax += total * 0.08m;
+        Output += $"{paragraph.Content}\n\n";
+    }
+}
+```
+
+### Document Structure
+
+```csharp
+public class Document
+{
+    private readonly List<IDocumentElement> _elements = new();
+
+    public void AddElement(IDocumentElement element)
+    {
+        _elements.Add(element);
+    }
+
+    public void Accept(IDocumentVisitor visitor)
+    {
+        foreach (var element in _elements)
+        {
+            element.Accept(visitor);
+        }
     }
 }
 ```
@@ -170,27 +196,28 @@ public class TaxVisitor : IVisitor
 ## Usage
 
 ```csharp
-var items = new List<IItem>
-{
-    new Book { Price = 25 },
-    new Fruit { PricePerKg = 3, Weight = 2.5m }
-};
+var document = new Document();
+document.AddElement(new Heading { Text = "Welcome", Level = 1 });
+document.AddElement(new Paragraph { Content = "This is visitor pattern" });
 
-var discountCalculator = new DiscountVisitor();
-var taxCalculator = new TaxVisitor();
+// Export to HTML
+var htmlVisitor = new HtmlVisitor();
+document.Accept(htmlVisitor);
+Console.WriteLine(htmlVisitor.Output);
 
-foreach (var item in items)
-{
-    item.Accept(discountCalculator);
-    item.Accept(taxCalculator);
-}
+// Export to Markdown
+var mdVisitor = new MarkdownVisitor();
+document.Accept(mdVisitor);
+Console.WriteLine(mdVisitor.Output);
 
-Console.WriteLine($"Total discount: {discountCalculator.TotalDiscount:C}");
-Console.WriteLine($"Total tax: {taxCalculator.TotalTax:C}");
+/* HTML Output:
+<h1>Welcome</h1>
+<p>This is visitor pattern</p>
 
-/* Output:
-Total discount: $2.63
-Total tax: $0.60
+Markdown Output:
+# Welcome
+
+This is visitor pattern
 */
 ```
 
@@ -198,20 +225,30 @@ Total tax: $0.60
 
 🔑
 
-- **Open/Closed Principle**: Add new visitors without changing elements
-- **Double Dispatch**: Runtime type-specific method resolution
-- **Separation of Concerns**: Business logic moved to visitors
-- **Stateful Visitors**: Can accumulate results during traversal
+- **Separation of Concerns**: Operations live outside elements
+- **Open/Closed Principle**: New visitors without changing elements
+- **Double Dispatch**: Runtime type checking via method overloading
+- **Structure Traversal**: Visitor handles iteration logic
+
+## When to Use
+
+✅
+
+- Many unrelated operations on object structure
+- Element classes are stable but operations change often
+- Need to separate business logic from domain models
 
 ## Code Comments
 
 - **Accept()**: Entry point for visitor operations
-- **VisitX()**: Visitor handles specific element types
-- **IVisitor**: Contains all operation variants
-- **IItem**: Ensures visitor acceptance
+- **Visit Methods**: Handle element-specific logic
+- **Output**: Visitor maintains operation state
+- **Document**: Manages element collection traversal
 
-## Variations
+## Common Pitfalls
 
-- **Hierarchical Visitors**: Handle class inheritance
-- **Composite Visitors**: Combine multiple operations
-- **Lambda Visitors**: Use delegate-based implementations
+⚠️
+
+- Breaking encapsulation if visitors need internal state
+- Complex setup for simple operations
+- Difficulty adding new element types

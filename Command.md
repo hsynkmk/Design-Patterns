@@ -35,6 +35,23 @@ Components:
 - Transactional operations
 - Job queues
 
+## How to Implement (OOP Steps)
+
+1️⃣ **Define Command Interface**
+
+- Declares `Execute()` and `Undo()`
+- _Type:_ Interface (`ICommand`)
+
+2️⃣ **Create Concrete Commands**
+
+- Bind action to receiver
+- _Type:_ Concrete classes
+
+3️⃣ **Build Invoker**
+
+- Stores/executes commands
+- _Type:_ Concrete class with queue/history
+
 ## Structure
 
 ⌨️

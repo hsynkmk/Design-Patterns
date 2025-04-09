@@ -30,6 +30,24 @@ Components:
 - Framework hooks
 - Standardized reporting
 
+## How to Implement (OOP Steps)
+
+1️⃣ **Create Abstract Base Class**
+
+- Defines template method (`final`)
+- Declares abstract primitive operations
+- _Type:_ Abstract class
+
+2️⃣ **Implement Hook Methods**
+
+- Optional virtual methods with default impl
+- _Type:_ Virtual methods
+
+3️⃣ **Build Concrete Subclasses**
+
+- Override abstract/hook methods
+- _Type:_ Concrete classes
+
 ## Structure
 
 ⌨️

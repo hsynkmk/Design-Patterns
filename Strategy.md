@@ -33,6 +33,24 @@ Components:
 - Data encryption methods
 - Sorting algorithm selection
 
+## How to Implement (OOP Steps)
+
+1️⃣ **Define Strategy Interface**
+
+- Declares algorithm method(s)
+- _Type:_ Interface (`IStrategy`)
+
+2️⃣ **Implement Concrete Strategies**
+
+- Separate class per algorithm variation
+- _Type:_ Concrete classes
+
+3️⃣ **Create Context Class**
+
+- Accepts strategy via constructor/property
+- Delegates work to strategy object
+- _Type:_ Concrete class
+
 ## Structure
 
 ⌨️

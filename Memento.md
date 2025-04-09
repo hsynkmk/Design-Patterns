@@ -25,6 +25,23 @@ State management is decoupled from business logic while preserving encapsulation
 - Transaction rollbacks in databases
 - Version control systems
 
+## How to Implement (OOP Steps)
+
+1️⃣ **Create Memento (Immutable Class)**
+
+- Contains snapshot of originator state
+- _Type:_ Concrete class with read-only properties
+
+2️⃣ **Implement Originator**
+
+- Has methods `CreateMemento()` and `Restore(memento)`
+- _Type:_ Concrete class with private state
+
+3️⃣ **Create Caretaker**
+
+- Manages memento history (stack/list)
+- _Type:_ Concrete collection class
+
 ## Structure
 
 ⌨️

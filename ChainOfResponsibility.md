@@ -31,6 +31,23 @@ Create handler chain where each:
 - Authentication middleware
 - Error handling
 
+## How to Implement (OOP Steps)
+
+1️⃣ **Create Handler Interface**
+
+- Declares `HandleRequest()` and `SetNext()`
+- _Type:_ Interface (`IHandler`)
+
+2️⃣ **Build Base Handler (Optional)**
+
+- Implements common chain logic
+- _Type:_ Abstract class
+
+3️⃣ **Implement Concrete Handlers**
+
+- Each handles specific conditions
+- _Type:_ Concrete classes
+
 ## Structure
 
 ⌨️
