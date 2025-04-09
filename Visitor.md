@@ -30,20 +30,25 @@ Separate algorithms from objects by:
 
 ## How to Implement (OOP Steps)
 
-1️⃣ **Define Element Interface (interface)**  
- Add `Accept(IVisitor)` method to all elements
+1️⃣ **Define Element Interface**
 
-2️⃣ **Create Visitor Interface**  
- Declare `Visit` methods for each element type
+- Declares `Accept(IVisitor)`
+- _Type:_ Interface (`IElement`)
 
-3️⃣ **Implement Elements**  
- Each element implements `Accept` to call visitor's method
+2️⃣ **Create Visitor Interface**
 
-4️⃣ **Create Concrete Visitors**  
- Implement operations by handling each element type
+- `Visit` methods for each element type
+- _Type:_ Interface (`IVisitor`)
 
-5️⃣ **Traverse Structure**  
- Pass visitor through object structure
+3️⃣ **Implement Elements**
+
+- `Accept` calls `visitor.Visit(this)`
+- _Type:_ Concrete classes
+
+4️⃣ **Build Concrete Visitors**
+
+- Implement element-specific operations
+- _Type:_ Concrete classes
 
 ## Structure
 
